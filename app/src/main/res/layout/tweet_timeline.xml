@@ -39,12 +39,14 @@
                           android:textColor="#cccccc"
                           android:textStyle="italic" />
             </LinearLayout>
-            <TextView android:id="@+id/updateText"
-                      android:layout_width="wrap_content"
-                      android:layout_height="80dp"
-                      android:layout_marginBottom="5dp"
-                      android:autoLink="all"
-                      android:textColor="#ffffff" />
+            <com.tylersuehr.socialtextview.SocialTextView
+                    android:id="@+id/updateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:hashtagColor="@color/blue"
+                    app:mentionColor="@color/blue"
+                    app:urlColor="@color/red"
+                    app:linkModes="hashtag|mention|url"/>
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_gravity="end"

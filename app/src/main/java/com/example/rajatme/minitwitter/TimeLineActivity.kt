@@ -41,14 +41,33 @@ class TimeLineActivity : AppCompatActivity(){
             .setOAuthConsumerSecret(TWITTER_CONSUMER_KEY_SECRET)
             .setOAuthAccessToken(userToken)
             .setOAuthAccessTokenSecret(userTokenSecret)
+            .setTweetModeExtended(true)
             .build()
         val twitter = TwitterFactory(cb).instance
         Thread {
-            val statuses : List<Status> = twitter.getHomeTimeline()
+             val statuses : List<Status> = twitter.getHomeTimeline()
             for(status in statuses) {
-                val userTimelineEntity = UserTimelineEntity(status.text,status.user.screenName,status.createdAt.time,status.user.profileImageURL.toString())
+                var updateText : String ?= null
+                if(status.retweetedStatus != null)
+                    updateText = status.retweetedStatus.text
+                else
+                    updateText = status.text
+                val userTimelineEntity = UserTimelineEntity(updateText,status.user.screenName,status.createdAt.time,status.user.profileImageURL.toString())
                 userTimelineViewModel!!.insert(userTimelineEntity)
             }
         }.start()
     }
 }
+
+//TODO(1) Adding clickable to mentions and hashtags
+// TODO(2) Making the timeline paginated
+//TODO(3) Fetching content from the Twitter4j text url
+//TODO(4) Adding actions to retweets and tweets
+//TODO(5) Adding a new FAB for posting tweets and create tweet activity
+// TODO(6) Search twitter activity
+//TODO(7) adding Dagger injection
+// TODO(8) Adding follow a user functionality
+//TODO(9) Edit profile functionality
+//TODO(10) Swipe to refresh functionality
+//TODO(11) Fetching data from DB on the first call
+

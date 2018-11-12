@@ -26,6 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".TimeLineActivity"/>
+        <activity android:name=".Hashtag"/>
+        <activity android:name=".MentionActivity"/>
     </application>
 
 </manifest>
