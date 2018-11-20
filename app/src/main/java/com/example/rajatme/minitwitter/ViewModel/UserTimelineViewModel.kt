@@ -1,17 +1,21 @@
 package com.example.rajatme.minitwitter.ViewModel
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LiveData
-import com.example.rajatme.minitwitter.Database.UserTimelineEntity
-import com.example.rajatme.minitwitter.Repository.TimelineRepository
 
-class UserTimelineViewModel(application: Application) : AndroidViewModel(application) {
-    private val timelineRepository = TimelineRepository(application)
-    fun insert(userTimelineEntity: UserTimelineEntity) {
-        timelineRepository.insert(userTimelineEntity)
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Transformations
+import android.arch.lifecycle.ViewModel
+import android.arch.paging.PagedList
+import android.content.Context
+import com.example.database.UserTimelineEntity
+import com.example.services.UserTimeLineService
+
+class UserTimelineViewModel(context : Context) : ViewModel() {
+    var repository = UserTimeLineService.create(context)
+
+    private val result = repository.fetchUserTimeLine()
+    fun getTimeLine() : LiveData<PagedList<UserTimelineEntity>>? {
+        return result
     }
-    fun getTimeline() : LiveData<List<UserTimelineEntity>> {
-        return timelineRepository.timeline
-    }
+
 }

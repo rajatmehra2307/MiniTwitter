@@ -1,20 +1,23 @@
 package com.example.rajatme.minitwitter
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import android.util.Log
 import android.widget.Toast
+import com.example.database.TimelineCache
+import com.example.database.UserTimelineEntity
 import com.example.network.TwitterapiService
 import com.example.network.models.Tweet
 //import com.example.network.service.UserTimeLineService
-import com.example.rajatme.minitwitter.Database.UserTimelineEntity
 import com.example.rajatme.minitwitter.ViewModel.UserTimelineViewModel
+import com.example.rajatme.minitwitter.ViewModel.UserTimelineViewModelFactory
 import com.example.rajatme.minitwitter.adapters.UserTimelineAdapter
 import com.example.services.UserTimeLineService
 import com.example.services.Utils.OAuthTokenObject
@@ -31,41 +34,47 @@ import twitter4j.conf.ConfigurationBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimeLineActivity : AppCompatActivity(){
-    var recyclerView : RecyclerView ?= null
+class TimeLineActivity : AppCompatActivity() {
+    var recyclerView: RecyclerView? = null
     var recyclerViewAdapter = UserTimelineAdapter()
-    var userTimelineViewModel : UserTimelineViewModel ?= null
+    var userTimelineViewModel: UserTimelineViewModel? = null
+    var swipeRefreshlayout : SwipeRefreshLayout ?= null
     private var disposable: Disposable? = null
     private val userTimeLineService by lazy {
-        UserTimeLineService.create()
+        UserTimeLineService.create(this)
     }
-//    private val
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_timeline)
         recyclerView = findViewById(R.id.recycler_view)
-        userTimelineViewModel = ViewModelProviders.of(this).get(UserTimelineViewModel::class.java)
-        val observer = Observer<List<UserTimelineEntity>> {
-            recyclerViewAdapter.setUserTimeLine(it)
+        userTimelineViewModel =
+                ViewModelProviders.of(this, UserTimelineViewModelFactory(this)).get(UserTimelineViewModel::class.java)
+        val observer = Observer<PagedList<UserTimelineEntity>> {
+            recyclerViewAdapter.submitList(it)
         }
-        userTimelineViewModel!!.getTimeline().observe(this,observer)
+        userTimelineViewModel!!.getTimeLine()!!.observe(this, observer)
         recyclerView!!.adapter = recyclerViewAdapter
         recyclerView!!.layoutManager = LinearLayoutManager(this)
+        swipeRefreshlayout = findViewById(R.id.swipeRefresh)
+//        var swipeRefreshListener = SwipeRefreshLayout.OnRefreshListener(){
+//            userTimeLineService.makeNetworkRequest()
+//        }
+        swipeRefreshlayout?.setOnRefreshListener{
+            userTimeLineService.makeNetworkRequest()
+            swipeRefreshlayout?.isRefreshing = false
+        }
         fetchTimeline()
     }
+
     fun fetchTimeline() {
-        val sharedPreferences = getSharedPreferences(PREFERENCE_NAME,0)
-        val userToken = sharedPreferences.getString(PREF_KEY_OAUTH_TOKEN,null)
-        val userTokenSecret = sharedPreferences.getString(PREF_KEY_OAUTH_SECRET,null)
-        val oAuthTokenObject = OAuthTokenObject(userToken,userTokenSecret)
-        var tweet_list = userTimeLineService.fetchUserTimeLine(true,true,"extended")
-        disposable = tweet_list?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(
-                { result ->  displayTimeline(result)},
-                { error -> Log.e("Fetching timeline->" ,error.message)}
-            )
+        val sharedPreferences = getSharedPreferences(PREFERENCE_NAME, 0)
+        val userToken = sharedPreferences.getString(PREF_KEY_OAUTH_TOKEN, null)
+        val userTokenSecret = sharedPreferences.getString(PREF_KEY_OAUTH_SECRET, null)
+        val oAuthTokenObject = OAuthTokenObject(userToken, userTokenSecret)
+        var tweet_list = userTimeLineService.fetchUserTimeLine()
+
 //
 //        Log.i("UserToken->",userToken)
 //        Log.i("UserTokenSecret->",userTokenSecret)
@@ -88,26 +97,28 @@ class TimeLineActivity : AppCompatActivity(){
 //                userTimelineViewModel!!.insert(userTimelineEntity)
 //            }
 //        }.start()
-   }
-    fun displayTimeline(result: List<Tweet>) {
-        if(result != null) {
-            for(tweet in result) {
-                var updateText : String ?= null
-                if(tweet.retweeted_status != null)
-                    updateText = tweet!!.retweeted_status!!.full_text
-                else
-                    updateText = tweet!!.full_text
-                var timeCreatedAt = tweet.created_at
-                var timeCreatedFormatted = SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy")
-                var date = timeCreatedFormatted.parse(timeCreatedAt)
-                var epoch = date.time
-
-                val userTimelineEntity = UserTimelineEntity(updateText,tweet.user.screen_name,epoch,tweet.user.profile_image_url)
-                userTimelineViewModel!!.insert(userTimelineEntity)
-
-
-            }
-        }
+//   }
+//    fun displayTimeline(result: List<Tweet>) {
+//        if(result != null) {
+//            for(tweet in result) {
+//                var id = tweet.id_str
+//                var updateText : String ?= null
+//                if(tweet.retweeted_status != null)
+//                    updateText = tweet!!.retweeted_status!!.full_text
+//                else
+//                    updateText = tweet!!.full_text
+//                var timeCreatedAt = tweet.created_at
+//                var timeCreatedFormatted = SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy")
+//                var date = timeCreatedFormatted.parse(timeCreatedAt)
+//                var epoch = date.time
+//
+//                val userTimelineEntity = UserTimelineEntity(id, updateText,tweet.user.screen_name,epoch,tweet.user.profile_image_url)
+//                userTimelineViewModel!!.insert(userTimelineEntity)
+//
+//
+//            }
+//        }
+//    }
     }
 }
 
