@@ -1,8 +1,10 @@
 package com.example.network
 
 import android.util.Log
+import com.example.database.UserTimelineDatabase
 import com.example.database.UserTimelineEntity
 import com.example.network.models.Tweet
+import com.example.network.models.UserInfo
 import io.reactivex.Observable
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -19,7 +21,7 @@ import retrofit2.http.Query
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-
+import javax.sql.DataSource
 
 
 fun getTimeline(api : TwitterapiService,
@@ -38,7 +40,7 @@ fun getTimeline(api : TwitterapiService,
                     var timeline = mutableListOf<UserTimelineEntity>()
                     var tweets = response.body()
                     for(tweet in tweets!!) {
-                        var id = tweet!!.id_str
+                        var id = tweet!!.id
                         var updateText : String ?= null
                         if(tweet.retweeted_status != null)
                             updateText = tweet!!.retweeted_status!!.full_text
@@ -62,7 +64,24 @@ fun getTimeline(api : TwitterapiService,
     )
 }
 
-
+//fun getUserhomeInfo(api : TwitterapiService,
+//                    authorizationHeader: String,
+//                    screenName : String,
+//                    onSuccess: (userInfo : UserInfo?) -> Unit) {
+//    api.getHomepageOfUser(authorizationHeader,screenName).enqueue(
+//        object : Callback<UserInfo> {
+//            override fun onFailure(call: Call<UserInfo>, t: Throwable) {
+//                Log.d("Getting user info->","Failed to retrieve data")
+//            }
+//
+//            override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>) {
+//                val userhomeInfo = response.body()
+//                onSuccess(userhomeInfo)
+//            }
+//
+//        }
+//    )
+//}
 interface TwitterapiService {
     @GET("1.1/statuses/home_timeline.json")
     fun getUserTimeLine(
@@ -75,6 +94,21 @@ interface TwitterapiService {
         @Query("tweet_mode") tweetMode: String = "extended"
     ): Call<List<Tweet>>
 
+    @GET("1.1/users/show.json")
+    fun getHomepageOfUser(
+        @Header("Authorization") authorizationHeader: String,
+        @Query("screen_name") screenName : String
+    ) : Observable<UserInfo>
+
+    @GET("1.1/statuses/user_timeline.json")
+    fun getTweetsByuser(
+        @Header("Authorization") authorizationHeader: String,
+        @Query("screen_name")screenName : String,
+        @Query("max_id")maxId: String? = null,
+        @Query("tweet_mode") tweetMode: String = "extended"
+    ): Observable<List<Tweet>>
+
+
     companion object Factory {
         fun create(): TwitterapiService {
             var httpClientBuilder = OkHttpClient.Builder()
@@ -82,6 +116,7 @@ interface TwitterapiService {
             val retrofit = Retrofit.Builder()
                 .client(httpClient)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl("https://api.twitter.com/")
                 .build()
 

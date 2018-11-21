@@ -1,4 +1,4 @@
-package com.example.rajatme.minitwitter
+package com.example.rajatme.minitwitter.activities
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,10 +7,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import com.example.rajatme.minitwitter.R
 import com.example.services.Utils.*
-import com.twitter.sdk.android.core.identity.TwitterLoginButton
 import twitter4j.Twitter
-import twitter4j.TwitterException
 import twitter4j.TwitterFactory
 import twitter4j.auth.RequestToken
 import java.lang.Exception
@@ -64,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun setUpTimeLine() {
-        val intent = Intent(this,TimeLineActivity::class.java)
+        val intent = Intent(this, TimeLineActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
     }

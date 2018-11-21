@@ -8,7 +8,7 @@ import kotlin.math.sign
 class CreateHeaderService {
     companion object {
         var oauthVersion = "1.0"
-        fun createHeader(parametersMap: MutableMap<String, String>, httpMethod: String): String {
+        fun createHeader(parametersMap: MutableMap<String, String>, httpMethod: String, url_extension :String): String {
             var oauthMap : MutableMap<String,String> = mutableMapOf<String,String>()
             oauthMap.put(OAUTH_TWITTER_CONSUMER_KEY_STRING, TWITTER_CONSUMER_KEY)
             oauthMap.put(OAUTH_TWITTER_SIGNATURE_METHOD_STRING, OAUTH_SIGNATURE_METHOD)
@@ -29,7 +29,7 @@ class CreateHeaderService {
                 encoded += entry.key + "=" + entry.value + "&"
             }
             encoded = encoded.substring(0, encoded.length - 1)
-            var url = BASE_URL + "1.1/statuses/home_timeline.json"
+            var url = BASE_URL + url_extension
             var finalString = httpMethod + "&" + OAuthUtil.encode(url) + "&" + OAuthUtil.encode(encoded)
             var signature = OAuthUtil.generateSignature(
                     finalString,

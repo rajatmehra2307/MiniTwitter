@@ -1,4 +1,4 @@
-package com.example.rajatme.minitwitter
+package com.example.rajatme.minitwitter.activities
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -8,13 +8,8 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.format.DateUtils
-import android.util.Log
-import android.widget.Toast
-import com.example.database.TimelineCache
 import com.example.database.UserTimelineEntity
-import com.example.network.TwitterapiService
-import com.example.network.models.Tweet
+import com.example.rajatme.minitwitter.R
 //import com.example.network.service.UserTimeLineService
 import com.example.rajatme.minitwitter.ViewModel.UserTimelineViewModel
 import com.example.rajatme.minitwitter.ViewModel.UserTimelineViewModelFactory
@@ -24,22 +19,12 @@ import com.example.services.Utils.OAuthTokenObject
 import com.example.services.Utils.PREFERENCE_NAME
 import com.example.services.Utils.PREF_KEY_OAUTH_SECRET
 import com.example.services.Utils.PREF_KEY_OAUTH_TOKEN
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import twitter4j.Status
-import twitter4j.TwitterFactory
-import twitter4j.conf.ConfigurationBuilder
-import java.text.SimpleDateFormat
-import java.util.*
 
 class TimeLineActivity : AppCompatActivity() {
     var recyclerView: RecyclerView? = null
     var recyclerViewAdapter = UserTimelineAdapter()
     var userTimelineViewModel: UserTimelineViewModel? = null
     var swipeRefreshlayout : SwipeRefreshLayout ?= null
-    private var disposable: Disposable? = null
     private val userTimeLineService by lazy {
         UserTimeLineService.create(this)
     }
@@ -58,9 +43,6 @@ class TimeLineActivity : AppCompatActivity() {
         recyclerView!!.adapter = recyclerViewAdapter
         recyclerView!!.layoutManager = LinearLayoutManager(this)
         swipeRefreshlayout = findViewById(R.id.swipeRefresh)
-//        var swipeRefreshListener = SwipeRefreshLayout.OnRefreshListener(){
-//            userTimeLineService.makeNetworkRequest()
-//        }
         swipeRefreshlayout?.setOnRefreshListener{
             userTimeLineService.makeNetworkRequest()
             swipeRefreshlayout?.isRefreshing = false
@@ -73,61 +55,14 @@ class TimeLineActivity : AppCompatActivity() {
         val userToken = sharedPreferences.getString(PREF_KEY_OAUTH_TOKEN, null)
         val userTokenSecret = sharedPreferences.getString(PREF_KEY_OAUTH_SECRET, null)
         val oAuthTokenObject = OAuthTokenObject(userToken, userTokenSecret)
-        var tweet_list = userTimeLineService.fetchUserTimeLine()
+        userTimeLineService.fetchUserTimeLine()
 
-//
-//        Log.i("UserToken->",userToken)
-//        Log.i("UserTokenSecret->",userTokenSecret)
-//        val cb = ConfigurationBuilder().setOAuthConsumerKey(TWITTER_CONSUMER_KEY)
-//            .setOAuthConsumerSecret(TWITTER_CONSUMER_KEY_SECRET)
-//            .setOAuthAccessToken(userToken)
-//            .setOAuthAccessTokenSecret(userTokenSecret)
-//            .setTweetModeExtended(true)
-//            .build()
-//        val twitter = TwitterFactory(cb).instance
-//        Thread {
-//            val statuses : List<Status> = twitter.getHomeTimeline()
-//            for(status in statuses) {
-//                var updateText : String ?= null
-//                if(status.retweetedStatus != null)
-//                    updateText = status.retweetedStatus.text
-//                else
-//                    updateText = status.text
-//                val userTimelineEntity = UserTimelineEntity(updateText,status.user.screenName,status.createdAt.time,status.user.profileImageURL.toString())
-//                userTimelineViewModel!!.insert(userTimelineEntity)
-//            }
-//        }.start()
-//   }
-//    fun displayTimeline(result: List<Tweet>) {
-//        if(result != null) {
-//            for(tweet in result) {
-//                var id = tweet.id_str
-//                var updateText : String ?= null
-//                if(tweet.retweeted_status != null)
-//                    updateText = tweet!!.retweeted_status!!.full_text
-//                else
-//                    updateText = tweet!!.full_text
-//                var timeCreatedAt = tweet.created_at
-//                var timeCreatedFormatted = SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy")
-//                var date = timeCreatedFormatted.parse(timeCreatedAt)
-//                var epoch = date.time
-//
-//                val userTimelineEntity = UserTimelineEntity(id, updateText,tweet.user.screen_name,epoch,tweet.user.profile_image_url)
-//                userTimelineViewModel!!.insert(userTimelineEntity)
-//
-//
-//            }
-//        }
-//    }
     }
 }
 
 //TODO Refactoring the code properly
-//TODO Using ListAdapter for RecyclerView
 //TODO Using Glide
 //TODO Adding activity for clicking urls
-//TODO Making the timeline paginated
-//TODO(1) Adding clickable to mentions and hashtags
 //TODO Seeing followers and following
 //TODO Searching tweets by hashtag
 //TODO adding alert bar on login with twitter

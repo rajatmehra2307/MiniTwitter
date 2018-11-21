@@ -45,7 +45,7 @@ class TimelineBoundaryCallback(private val cache : TimelineCache) : PagedList.Bo
             parameterValues.put("max_id",maxId)
         if(sinceId != null)
             parameterValues.put("since_id",sinceId)
-        var authorizationHeader = CreateHeaderService.createHeader(parameterValues,"GET")
+        var authorizationHeader = CreateHeaderService.createHeader(parameterValues,"GET","1.1/statuses/home_timeline.json")
         if(isRequestInProgress)
             return
         isRequestInProgress = true

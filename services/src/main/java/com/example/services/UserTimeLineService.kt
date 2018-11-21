@@ -24,8 +24,8 @@ class UserTimeLineService(private val cache : TimelineCache) {
 
     private val boundaryCallback = TimelineBoundaryCallback(cache)
     fun fetchUserTimeLine() : LiveData<PagedList<UserTimelineEntity>>? {
-        val dataSource = cache.getTimelineFromCache()
-        val data = LivePagedListBuilder(dataSource, DATABASE_PAGE_SIZE).setBoundaryCallback(boundaryCallback).build()
+        val dataSourceFactory = cache.getTimelineFromCache()
+        val data = LivePagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE).setBoundaryCallback(boundaryCallback).build()
         return data
     }
     fun makeNetworkRequest() {
@@ -42,8 +42,6 @@ class UserTimeLineService(private val cache : TimelineCache) {
 
         private const val DATABASE_PAGE_SIZE = 20
     }
-
-
 
 
 }

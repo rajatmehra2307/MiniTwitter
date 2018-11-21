@@ -1,11 +1,11 @@
 package com.example.network.models
 
+import com.google.gson.annotations.SerializedName
+
 data class Tweet(
-    var created_at :  String,
-    var id_str : String,
+    @SerializedName("created_at")var created_at :  String,
+    @SerializedName("id_str")var id : String,
     var full_text: String,
-//   var entities : TweetEntity,
-// var extended_entities : TweetExtendedEntity,
     var user : TweetUser,
     val retweeted_status : Tweet ?= null
 )
@@ -18,13 +18,3 @@ data class TweetUser(
     var friends_count : Long,
     var profile_image_url : String
 )
-
-//class TweetExtendedEntity {
-//
-//}
-
-//class TweetEntity {
-//
-//}
-
-//data class TwitterTimelineResult(val result : List<Tweet>)

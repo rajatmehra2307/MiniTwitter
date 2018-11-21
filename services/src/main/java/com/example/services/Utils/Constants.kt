@@ -20,3 +20,6 @@ const val URL_TWITTER_AUTH = "auth_url"
 const val URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier"
 const val OAUTH_SIGNATURE_METHOD = "HMAC-SHA1"
 const val BASE_URL = "https://api.twitter.com/"
+const val HASHTAG = 1
+const val MENTION = 2
+const val URL = 3
