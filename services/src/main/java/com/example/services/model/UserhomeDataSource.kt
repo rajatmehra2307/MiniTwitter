@@ -32,7 +32,7 @@ class UserhomeDataSource(var screenName : String) : ItemKeyedDataSource<Long, Tw
         var parameterValues = mutableMapOf<String,String> ()
         parameterValues.put("screen_name",screenName)
         parameterValues.put("tweet_mode","extended")
-        parameterValues.put("max_id",params.key.toString())
+        parameterValues.put("max_id",(params.key + 1).toString())
         var authorizationHeader = CreateHeaderService.createHeader(parameterValues,"GET","1.1/statuses/user_timeline.json")
         disposable = api.getTweetsByuser(authorizationHeader,screenName,params.key.toString())
             .subscribeOn(Schedulers.io())

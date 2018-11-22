@@ -1,27 +1,23 @@
 package com.example.network
 
 import android.util.Log
-import com.example.database.UserTimelineDatabase
 import com.example.database.UserTimelineEntity
 import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
+import com.example.network.models.UserList
 import io.reactivex.Observable
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.Callback
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
+import retrofit2.http.POST
 import retrofit2.http.Query
-import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
-import javax.sql.DataSource
 
 
 fun getTimeline(api : TwitterapiService,
@@ -64,24 +60,6 @@ fun getTimeline(api : TwitterapiService,
     )
 }
 
-//fun getUserhomeInfo(api : TwitterapiService,
-//                    authorizationHeader: String,
-//                    screenName : String,
-//                    onSuccess: (userInfo : UserInfo?) -> Unit) {
-//    api.getHomepageOfUser(authorizationHeader,screenName).enqueue(
-//        object : Callback<UserInfo> {
-//            override fun onFailure(call: Call<UserInfo>, t: Throwable) {
-//                Log.d("Getting user info->","Failed to retrieve data")
-//            }
-//
-//            override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>) {
-//                val userhomeInfo = response.body()
-//                onSuccess(userhomeInfo)
-//            }
-//
-//        }
-//    )
-//}
 interface TwitterapiService {
     @GET("1.1/statuses/home_timeline.json")
     fun getUserTimeLine(
@@ -108,6 +86,27 @@ interface TwitterapiService {
         @Query("tweet_mode") tweetMode: String = "extended"
     ): Observable<List<Tweet>>
 
+    @GET("1.1/followers/list.json")
+    fun getFollowersOfUser(
+        @Header("Authorization") authorizationHeader: String,
+        @Query("screen_name") screenName: String,
+        @Query("cursor") cursor: String ?= null
+    ) : Observable<UserList>
+
+    @GET("1.1/friends/list.json")
+    fun getFriendsOfUser(
+        @Header("Authorization") authorizationHeader: String,
+        @Query("screen_name") screenName: String,
+        @Query("cursor") cursor: String ?= null
+    ) : Observable<UserList>
+
+    @POST("1.1/friendships/create.json")
+    fun followUser(
+        @Header("Authorization") authorizationHeader: String,
+        @Query("screen_name") screenName: String,
+        @Query("follow") toFollow : Boolean = true
+
+    ) : Observable<UserInfo>
 
     companion object Factory {
         fun create(): TwitterapiService {

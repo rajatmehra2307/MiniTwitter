@@ -29,6 +29,8 @@
         <activity android:name=".activities.Hashtag"/>
         <activity android:name=".activities.MentionActivity"/>
         <activity android:name=".activities.UserhomepageActivity"/>
+        <activity android:name=".activities.FollowersActivity"/>
+        <activity android:name=".activities.FollowingActivity"/>
     </application>
 
 </manifest>
