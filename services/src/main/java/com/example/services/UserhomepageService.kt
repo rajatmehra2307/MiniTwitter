@@ -2,12 +2,18 @@ package com.example.services
 import android.arch.lifecycle.LiveData
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
+import android.util.Log
 import com.example.network.TwitterapiService
 import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
+import com.example.services.model.UserFollowerDataSourceFactory
+import com.example.services.model.UserFollowersDataSource
 import com.example.services.model.UserhomeDataSource
 import com.example.services.model.UserhomeDataSourceFactory
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 
 class UserhomepageService {
@@ -26,6 +32,29 @@ class UserhomepageService {
         var dataSourceFactory = UserhomeDataSourceFactory(UserhomeDataSource(userName))
         var result = LivePagedListBuilder(dataSourceFactory,20).build()
         return result
+    }
+
+    fun fetchFollowersOfUser(userName : String) : LiveData<PagedList<UserInfo>> {
+        var dataSourceFactory = UserFollowerDataSourceFactory(UserFollowersDataSource(userName))
+        var result = LivePagedListBuilder(dataSourceFactory,20).build()
+        return result
+    }
+
+    fun followAUser(userName : String) {
+        var disposable : Disposable ?= null
+        var parameterValues = mutableMapOf<String,String> ()
+        parameterValues.put("screen_name",userName)
+        parameterValues.put("follow","true")
+        var authorizationHeader = CreateHeaderService.createHeader(parameterValues,"POST","1.1/friendships/create.json")
+        disposable = twitterapiService.followUser(authorizationHeader,userName)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({ result ->
+                Log.d("Follow User ->",result.toString())
+            },{
+                    error -> Log.e("Follow User -> ", error.message)
+            })
+
     }
 
 }

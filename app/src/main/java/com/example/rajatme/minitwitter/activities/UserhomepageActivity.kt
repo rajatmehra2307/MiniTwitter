@@ -3,6 +3,7 @@ package com.example.rajatme.minitwitter.activities
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -57,6 +58,11 @@ class UserhomepageActivity : AppCompatActivity() {
         recyclerView!!.adapter = recyclerViewAdapter
         recyclerView!!.layoutManager = LinearLayoutManager(this)
 
+        followersTextView?.setOnClickListener {
+            val intent = Intent(this, FollowersActivity::class.java)
+            intent.putExtra("name", screenName)
+            startActivity(intent)
+        }
 
         fetchUserInfo(screenName)
     }

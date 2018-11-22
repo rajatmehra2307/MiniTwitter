@@ -57,13 +57,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:textColor="#ffffff"
+                        android:layout_gravity="right"
                         android:text="retweet" />
 
                 <Button android:id="@+id/reply"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#ffffff"
-                        android:text="reply" />
+                        android:text="reply"
+                        android:layout_gravity="right"/>
             </LinearLayout>
 
         </LinearLayout>
