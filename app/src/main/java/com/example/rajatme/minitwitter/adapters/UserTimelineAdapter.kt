@@ -1,17 +1,11 @@
 package com.example.rajatme.minitwitter.adapters
 
 import android.arch.paging.PagedListAdapter
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.AsyncTask
 import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.example.database.UserTimelineEntity
 import com.example.rajatme.minitwitter.R
-import java.io.InputStream
-import java.net.URL
 
 class UserTimelineAdapter :
     PagedListAdapter<UserTimelineEntity, UserTimelineViewHolder>(TIMELINE_COMPARATOR) {
@@ -44,19 +38,4 @@ class UserTimelineAdapter :
         }
     }
 
-
-    class ImageDownloaderAsyncTask(var imageView: ImageView?) : AsyncTask<String, Void, Bitmap?>() {
-        override fun onPostExecute(result: Bitmap?) {
-            imageView!!.setImageBitmap(result)
-        }
-
-        override fun doInBackground(vararg params: String?): Bitmap? {
-            var image: Bitmap
-            var url = URL(params[0])
-            var input = url.getContent() as InputStream?
-            image = BitmapFactory.decodeStream(input)
-            return image
-        }
-
-    }
 }

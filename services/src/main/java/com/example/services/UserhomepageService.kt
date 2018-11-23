@@ -1,11 +1,13 @@
 package com.example.services
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import android.util.Log
 import com.example.network.TwitterapiService
 import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
+import com.example.services.Utils.NetworkState
 import com.example.services.model.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,6 +17,7 @@ import io.reactivex.schedulers.Schedulers
 
 class UserhomepageService {
     var twitterapiService = TwitterapiService.create()
+    var networkState : LiveData<NetworkState> ?= null
 
     fun fetchUserInfo(userName : String) : Observable<UserInfo> {
         var parameterValues = mutableMapOf<String,String> ()
@@ -33,6 +36,10 @@ class UserhomepageService {
 
     fun fetchFollowersOfUser(userName : String) : LiveData<PagedList<UserInfo>> {
         var dataSourceFactory = UserFollowerDataSourceFactory(UserFollowersFriendsDataSource(userName,"1.1/followers/list.json"))
+        networkState = Transformations.switchMap(dataSourceFactory.userfollowerDataSourceLiveData){
+            it -> it.networkState
+        }
+
         var result = LivePagedListBuilder(dataSourceFactory,20).build()
         return result
     }
@@ -57,6 +64,9 @@ class UserhomepageService {
 
     fun fetchFriendsOfUser(userName: String) : LiveData<PagedList<UserInfo>>{
         var dataSourceFactory = UserFollowerDataSourceFactory(UserFollowersFriendsDataSource(userName,"1.1/friends/list.json"))
+        networkState = Transformations.switchMap(dataSourceFactory.userfollowerDataSourceLiveData){
+                it -> it.networkState
+        }
         var result = LivePagedListBuilder(dataSourceFactory,20).build()
         return result
     }

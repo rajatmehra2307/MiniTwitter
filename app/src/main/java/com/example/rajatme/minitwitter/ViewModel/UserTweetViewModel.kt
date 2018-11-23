@@ -8,6 +8,7 @@ import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
 import com.example.services.UserTimeLineService
 import com.example.services.UserhomepageService
+import com.example.services.Utils.NetworkState
 
 class UserTweetViewModel(var screenName : String) : ViewModel() {
 
@@ -24,6 +25,10 @@ class UserTweetViewModel(var screenName : String) : ViewModel() {
 
     fun getFriendsOfAUser() : LiveData<PagedList<UserInfo>> {
         return repository.fetchFriendsOfUser(screenName)
+    }
+
+    fun getNetworkState() : LiveData<NetworkState> {
+        return repository.networkState!!
     }
 
 }

@@ -19,6 +19,7 @@ import com.example.services.UserhomepageService
 class UserFollowerAdapter : PagedListAdapter<UserInfo,UserFollowerAdapter.UserFollowerViewHolder>(USER_COMPARATOR) {
 
     private var stateOfView = mutableSetOf<Int>()
+
     override fun onBindViewHolder(userFollowerViewHolder: UserFollowerViewHolder , position: Int) {
         getItem(position)?.let {
             userFollowerViewHolder.bind(it,position)
@@ -57,7 +58,7 @@ class UserFollowerAdapter : PagedListAdapter<UserInfo,UserFollowerAdapter.UserFo
             if (stateOfView.contains(position))
                 followButton!!.isEnabled = false
             userNameTextView?.setText(follower.name)
-            userHandleTextView?.setText(follower.handle)
+            userHandleTextView?.setText("@${follower.handle}")
             userDescription?.setText(follower.description)
             followButton?.setOnClickListener {
                 userhomepageService.followAUser(follower.handle)
@@ -66,6 +67,7 @@ class UserFollowerAdapter : PagedListAdapter<UserInfo,UserFollowerAdapter.UserFo
             }
             Glide.with(itemView.context)
                 .load(follower.imageUrl)
+                .placeholder(R.drawable.ic_action_name)
                 .into(profilePicImageView)
         }
 

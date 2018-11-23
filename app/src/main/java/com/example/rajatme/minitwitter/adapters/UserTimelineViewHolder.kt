@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.database.UserTimelineEntity
 import com.example.rajatme.minitwitter.activities.Hashtag
 import com.example.rajatme.minitwitter.R
@@ -59,7 +60,10 @@ class UserTimelineViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         tweetText!!.setLinkText(userTimelineEntity.updateText)
         val createdAt = userTimelineEntity.timeCreated
         updateTimeView!!.setText(DateUtils.getRelativeTimeSpanString(createdAt!!))
-        UserTimelineAdapter.ImageDownloaderAsyncTask(image).execute(userTimelineEntity.imageUrl)
+        Glide.with(itemView.context)
+            .load(userTimelineEntity.imageUrl)
+            .placeholder(R.drawable.ic_action_name)
+            .into(image)
     }
 
 

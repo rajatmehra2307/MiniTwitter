@@ -1,5 +1,6 @@
 package com.example.rajatme.minitwitter.activities
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
@@ -35,8 +37,13 @@ class UserhomepageActivity : AppCompatActivity() {
     var recyclerView : RecyclerView ?= null
     var userhomepageService = UserhomepageService()
     private var disposable: Disposable? = null
+    private var dialog: AlertDialog ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val builder = AlertDialog.Builder(this)
+        builder.setCancelable(false)
+        builder!!.setView(R.layout.layout_loading_dialog)
+        dialog = builder.create()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_userhomepage)
         var screenName = intent.getStringExtra("name")
@@ -72,14 +79,21 @@ class UserhomepageActivity : AppCompatActivity() {
     }
 
     fun fetchUserInfo(screen_id : String) {
+        dialog!!.show()
         val userInfo = userhomepageService.fetchUserInfo(screen_id)
         disposable = userInfo.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { result ->
-                displayInfo(result)
+                    dialog!!.dismiss()
+                    displayInfo(result)
+
                 },
-                {error -> Log.e("Fetching userInfo ->",error.message)
+                { error -> Log.e("Fetching userInfo ->",error.message)
+                    dialog!!.dismiss()
+                    Toast.makeText(this,"There was an error fetching the result",Toast.LENGTH_SHORT).show()
+                    finish()
+
                 })
         userhomepageService.fetchTweetsbyUser(screen_id)
     }
