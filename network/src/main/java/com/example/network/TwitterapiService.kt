@@ -2,9 +2,7 @@ package com.example.network
 
 import android.util.Log
 import com.example.database.UserTimelineEntity
-import com.example.network.models.Tweet
-import com.example.network.models.UserInfo
-import com.example.network.models.UserList
+import com.example.network.models.*
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -108,18 +106,19 @@ interface TwitterapiService {
 
     ) : Observable<UserInfo>
 
-    companion object Factory {
-        fun create(): TwitterapiService {
-            var httpClientBuilder = OkHttpClient.Builder()
-            var httpClient = httpClientBuilder.build()
-            val retrofit = Retrofit.Builder()
-                .client(httpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl("https://api.twitter.com/")
-                .build()
+    @GET("1.1/search/tweets.json")
+    fun searchTweets(
+        @Header("Authorization") authorizationHeader: String,
+        @Query("q") query: String,
+        @Query("include_my_retweet") include_entities : Boolean = true,
+        @Query("tweet_mode") tweetMode: String ="extended",
+        @Query("max_id") maxId: String ?= null
+    ) : Observable<SearchResult>
 
-            return retrofit.create(TwitterapiService::class.java)
-        }
-    }
+    @GET("1.1/friendships/lookup.json")
+    fun lookupConnection(
+        @Header("Authorization") authorizationHeader: String,
+        @Query("screen_name") screenName: String
+    ) : Observable<List<LookUpResult>>
+
 }

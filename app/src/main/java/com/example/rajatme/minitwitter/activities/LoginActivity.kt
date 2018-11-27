@@ -2,12 +2,14 @@ package com.example.rajatme.minitwitter.activities
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import com.example.rajatme.minitwitter.R
+import com.example.rajatme.minitwitter.databinding.ActivityLoginBinding
 import com.example.services.Utils.*
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
@@ -25,8 +27,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         sharedPreference = getSharedPreferences(PREFERENCE_NAME,0)
         if(!isUserLoggedInAlready()) {
-            setContentView(R.layout.activity_login)
-            twitterLoginBtn = findViewById(R.id.login_button)
+            var binding = DataBindingUtil.setContentView<ActivityLoginBinding>(this,R.layout.activity_login)
+            twitterLoginBtn = binding.loginButton
             twitterLoginBtn!!.setOnClickListener{loginToTwitter()}
         }
         else {
@@ -63,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun setUpTimeLine() {
-        val intent = Intent(this, TimeLineActivity::class.java)
+        val intent = Intent(this, BaseActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
     }

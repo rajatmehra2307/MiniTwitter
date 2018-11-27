@@ -12,27 +12,24 @@ import com.example.network.models.Tweet
 import com.example.rajatme.minitwitter.activities.Hashtag
 import com.example.rajatme.minitwitter.R
 import com.example.rajatme.minitwitter.activities.UserhomepageActivity
+import com.example.rajatme.minitwitter.databinding.TweetTimelineBinding
+import com.example.rajatme.minitwitter.databindingmodel.TweetDataBinding
 import com.example.services.Utils.HASHTAG
 import com.example.services.Utils.MENTION
 import com.tylersuehr.socialtextview.SocialTextView
 import java.text.SimpleDateFormat
 
-class UserTweetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private var image: ImageView? = null
-    private var userNameView: TextView? = null
-    private var updateTimeView: TextView? = null
+class UserTweetViewHolder(var binding : TweetTimelineBinding) : RecyclerView.ViewHolder(binding.root) {
+
     private var tweetTextView: SocialTextView? = null
     private var retweetButton: Button? = null
     private var replyButton: Button? = null
     private val TAG = "UserTimeLineAdapter"
 
     fun initialise() {
-        image = itemView.findViewById(R.id.profile_img)
-        userNameView = itemView.findViewById(R.id.userScreen)
-        updateTimeView = itemView.findViewById(R.id.updateTime)
-        tweetTextView = itemView.findViewById(R.id.updateText)
-        retweetButton = itemView.findViewById(R.id.retweet)
-        replyButton = itemView.findViewById(R.id.reply)
+        tweetTextView = binding.updateText
+        retweetButton = binding.retweet
+        replyButton = binding.reply
         var listener = SocialTextView.OnLinkClickListener { i: Int, s: String ->
             when (i) {
                 HASHTAG -> {
@@ -58,20 +55,23 @@ class UserTweetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(tweet : Tweet) {
         var tweetText : String
-        userNameView!!.setText(tweet.user.screen_name)
         if(tweet.retweeted_status != null)
             tweetText = tweet!!.retweeted_status!!.full_text
         else
             tweetText = tweet.full_text
-        tweetTextView?.setLinkText(tweetText)
+
         var timeCreatedAt = tweet.created_at
         var timeCreatedFormatted = SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy")
         var date = timeCreatedFormatted.parse(timeCreatedAt)
         var epoch = date.time
-        updateTimeView!!.setText(DateUtils.getRelativeTimeSpanString(epoch))
+
+        var tweetDataBinding = TweetDataBinding(tweet.user.profile_image_url,tweet.user.screen_name,(DateUtils.getRelativeTimeSpanString(epoch)).toString())
+        binding.tweet = tweetDataBinding
+        binding.updateText.setLinkText(tweetText)
         Glide.with(itemView.context)
             .load(tweet.user.profile_image_url)
-            .into(image)
+            .placeholder(R.drawable.ic_action_name)
+            .into(binding.profileImg)
 
     }
 

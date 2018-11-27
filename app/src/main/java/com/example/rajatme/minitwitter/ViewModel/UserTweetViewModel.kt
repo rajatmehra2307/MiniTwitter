@@ -3,16 +3,13 @@ package com.example.rajatme.minitwitter.ViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.paging.PagedList
-import com.example.database.UserTimelineEntity
 import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
-import com.example.services.UserTimeLineService
 import com.example.services.UserhomepageService
 import com.example.services.Utils.NetworkState
+import javax.inject.Inject
 
-class UserTweetViewModel(var screenName : String) : ViewModel() {
-
-    var repository = UserhomepageService()
+class UserTweetViewModel(var screenName : String, var repository: UserhomepageService) : ViewModel() {
 
     private val result = repository.fetchTweetsbyUser(screenName)
 

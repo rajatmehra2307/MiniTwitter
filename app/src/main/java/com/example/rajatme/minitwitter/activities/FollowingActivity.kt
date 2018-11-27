@@ -13,7 +13,7 @@ class FollowingActivity : FollowActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var viewModel =
-            ViewModelProviders.of(this, UserTweetViewModelFactory(screenName)).get(UserTweetViewModel::class.java)
+            ViewModelProviders.of(this, UserTweetViewModelFactory(screenName,userhomepageService)).get(UserTweetViewModel::class.java)
         val observer = Observer<PagedList<UserInfo>> {
             recyclerViewAdapter.submitList(it)
         }

@@ -12,11 +12,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class UserFollowersFriendsDataSource(var screenName : String, var url_extension : String) : PageKeyedDataSource<String, UserInfo>() {
+class UserFollowersFriendsDataSource(var screenName : String, var url_extension : String, var twitterapiService: TwitterapiService) : PageKeyedDataSource<String, UserInfo>() {
 
 
     private var disposable : Disposable ?= null
-    private var twitterapiService = TwitterapiService.create()
     var networkState = MutableLiveData<NetworkState>()
     var initialLoading = MutableLiveData<NetworkState>()
 
@@ -71,10 +70,10 @@ class UserFollowersFriendsDataSource(var screenName : String, var url_extension 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
                     callback.onResult(result.userList, result.nextCursor)
-//                    networkState.postValue(NetworkState.LOADED)
+                    networkState.postValue(NetworkState.LOADED)
                 }, { error ->
                     Log.e("Datasource for follower", error.message)
-//                    networkState.postValue(NetworkState(NetworkState.Status.FAILED,error.message!!))
+                    networkState.postValue(NetworkState(NetworkState.Status.FAILED,error.message!!))
                 })
         }
         else if(url_extension.contains("friends")) {

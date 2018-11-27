@@ -10,9 +10,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class UserhomeDataSource(var screenName : String) : ItemKeyedDataSource<Long, Tweet>() {
+class UserhomeDataSource(var screenName : String, var api : TwitterapiService) : ItemKeyedDataSource<Long, Tweet>() {
     private var disposable : Disposable ?= null
-    private val api = TwitterapiService.create()
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Tweet>) {
         var parameterValues = mutableMapOf<String,String> ()
         parameterValues.put("screen_name",screenName)

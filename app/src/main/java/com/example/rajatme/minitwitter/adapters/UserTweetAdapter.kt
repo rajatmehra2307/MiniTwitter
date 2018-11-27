@@ -1,11 +1,13 @@
 package com.example.rajatme.minitwitter.adapters
 
 import android.arch.paging.PagedListAdapter
+import android.databinding.DataBindingUtil
 import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.network.models.Tweet
 import com.example.rajatme.minitwitter.R
+import com.example.rajatme.minitwitter.databinding.TweetTimelineBinding
 
 class UserTweetAdapter : PagedListAdapter<Tweet,UserTweetViewHolder>(TWEET_COMPARATOR){
     override fun onBindViewHolder(userTweetViewHolder: UserTweetViewHolder, position: Int) {
@@ -27,8 +29,8 @@ class UserTweetAdapter : PagedListAdapter<Tweet,UserTweetViewHolder>(TWEET_COMPA
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): UserTweetViewHolder {
         val context = viewGroup.context
         val layoutInflater = LayoutInflater.from(context)
-        val view = layoutInflater.inflate(R.layout.tweet_timeline, viewGroup, false)
-        val userTweetViewHolder = UserTweetViewHolder(view)
+        var binding = DataBindingUtil.inflate<TweetTimelineBinding>(layoutInflater,R.layout.tweet_timeline,viewGroup,false)
+        val userTweetViewHolder = UserTweetViewHolder(binding)
         userTweetViewHolder.initialise()
         return userTweetViewHolder
 
