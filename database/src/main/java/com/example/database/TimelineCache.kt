@@ -1,13 +1,13 @@
 package com.example.database
 
-import android.arch.lifecycle.LiveData
 import android.arch.paging.DataSource
-import android.provider.ContactsContract
 import android.util.Log
 import java.util.concurrent.Executor
+import java.util.concurrent.Executors
+import javax.inject.Inject
 
-class TimelineCache(private val userTimelineDao: UserTimelineDao,
-                    private val ioExecutor: Executor) {
+class TimelineCache @Inject constructor(private val userTimelineDao: UserTimelineDao,
+                                        private val ioExecutor: Executor) {
     fun insert(timeline : MutableList<UserTimelineEntity>?, insertfinished : () -> Unit) {
         ioExecutor.execute {
             Log.d("UserTimelineLocal cache", "inserting ${timeline?.size} entries")

@@ -2,6 +2,7 @@ package com.example.network
 
 import android.util.Log
 import com.example.database.UserTimelineEntity
+import com.example.network.models.SearchResult
 import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
 import com.example.network.models.UserList
@@ -107,6 +108,15 @@ interface TwitterapiService {
         @Query("follow") toFollow : Boolean = true
 
     ) : Observable<UserInfo>
+
+    @GET("1.1/search/tweets.json")
+    fun searchTweets(
+        @Header("Authorization") authorizationHeader: String,
+        @Query("q") query: String,
+        @Query("include_my_retweet") include_entities : Boolean = true,
+        @Query("tweet_mode") tweetMode: String ="extended",
+        @Query("max_id") maxId: String ?= null
+    ) : Observable<SearchResult>
 
     companion object Factory {
         fun create(): TwitterapiService {

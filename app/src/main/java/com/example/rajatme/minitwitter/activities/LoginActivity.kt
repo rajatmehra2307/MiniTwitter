@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun setUpTimeLine() {
-        val intent = Intent(this, TimeLineActivity::class.java)
+        val intent = Intent(this, BaseActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
     }

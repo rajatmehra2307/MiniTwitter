@@ -14,6 +14,7 @@ import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
 import com.example.rajatme.minitwitter.R
 import com.example.services.UserhomepageService
+import javax.inject.Inject
 
 
 class UserFollowerAdapter : PagedListAdapter<UserInfo,UserFollowerAdapter.UserFollowerViewHolder>(USER_COMPARATOR) {
@@ -52,7 +53,10 @@ class UserFollowerAdapter : PagedListAdapter<UserInfo,UserFollowerAdapter.UserFo
         private var userHandleTextView: TextView? = null
         private var userDescription: TextView? = null
         private var followButton: Button? = null
-        private var userhomepageService = UserhomepageService()
+
+        @Inject
+        lateinit var userhomepageService : UserhomepageService
+
         fun bind(follower: UserInfo, position: Int) {
             followButton!!.isEnabled = true
             if (stateOfView.contains(position))

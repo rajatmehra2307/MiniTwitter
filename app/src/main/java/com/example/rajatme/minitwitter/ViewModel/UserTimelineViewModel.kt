@@ -9,9 +9,10 @@ import android.arch.paging.PagedList
 import android.content.Context
 import com.example.database.UserTimelineEntity
 import com.example.services.UserTimeLineService
+import javax.inject.Inject
 
-class UserTimelineViewModel(context : Context) : ViewModel() {
-    var repository = UserTimeLineService.create(context)
+class UserTimelineViewModel @Inject constructor(var userTimeLineService: UserTimeLineService) : ViewModel() {
+    var repository = userTimeLineService
 
     private val result = repository.fetchUserTimeLine()
     fun getTimeLine() : LiveData<PagedList<UserTimelineEntity>>? {

@@ -9,14 +9,17 @@ import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
 import com.example.services.Utils.NetworkState
 import com.example.services.model.*
+import dagger.Provides
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
+class UserhomepageService @Inject constructor(var twitterapiService: TwitterapiService) {
 
-class UserhomepageService {
-    var twitterapiService = TwitterapiService.create()
     var networkState : LiveData<NetworkState> ?= null
 
     fun fetchUserInfo(userName : String) : Observable<UserInfo> {
@@ -29,13 +32,13 @@ class UserhomepageService {
     }
 
     fun fetchTweetsbyUser(userName : String) : LiveData<PagedList<Tweet>> {
-        var dataSourceFactory = UserhomeDataSourceFactory(UserhomeDataSource(userName))
+        var dataSourceFactory = UserhomeDataSourceFactory(UserhomeDataSource(userName,twitterapiService))
         var result = LivePagedListBuilder(dataSourceFactory,20).build()
         return result
     }
 
     fun fetchFollowersOfUser(userName : String) : LiveData<PagedList<UserInfo>> {
-        var dataSourceFactory = UserFollowerDataSourceFactory(UserFollowersFriendsDataSource(userName,"1.1/followers/list.json"))
+        var dataSourceFactory = UserFollowerDataSourceFactory(UserFollowersFriendsDataSource(userName,"1.1/followers/list.json", twitterapiService))
         networkState = Transformations.switchMap(dataSourceFactory.userfollowerDataSourceLiveData){
             it -> it.networkState
         }
@@ -63,7 +66,7 @@ class UserhomepageService {
     }
 
     fun fetchFriendsOfUser(userName: String) : LiveData<PagedList<UserInfo>>{
-        var dataSourceFactory = UserFollowerDataSourceFactory(UserFollowersFriendsDataSource(userName,"1.1/friends/list.json"))
+        var dataSourceFactory = UserFollowerDataSourceFactory(UserFollowersFriendsDataSource(userName,"1.1/friends/list.json",twitterapiService))
         networkState = Transformations.switchMap(dataSourceFactory.userfollowerDataSourceLiveData){
                 it -> it.networkState
         }

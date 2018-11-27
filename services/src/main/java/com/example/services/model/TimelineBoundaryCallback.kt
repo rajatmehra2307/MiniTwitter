@@ -9,12 +9,9 @@ import com.example.network.getTimeline
 import com.example.services.CreateHeaderService
 import com.example.services.Utils.BASE_URL
 
-class TimelineBoundaryCallback(private val cache : TimelineCache) : PagedList.BoundaryCallback<UserTimelineEntity>() {
+class TimelineBoundaryCallback(private val cache : TimelineCache, var apiservice: TwitterapiService) : PagedList.BoundaryCallback<UserTimelineEntity>() {
     private var isRequestInProgress = false
     private val NETWORK_CALL_SIZE = "50"
-    val apiservice by lazy {
-        TwitterapiService.create()
-    }
 
     override fun onZeroItemsLoaded() {
         requestAndSave(null,null)

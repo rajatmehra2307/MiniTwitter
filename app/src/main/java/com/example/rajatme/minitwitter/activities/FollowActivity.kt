@@ -8,18 +8,24 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import com.example.rajatme.minitwitter.R
+import com.example.rajatme.minitwitter.TwitterApplication
 import com.example.rajatme.minitwitter.adapters.UserFollowerAdapter
 import com.example.services.UserhomepageService
 import com.example.services.Utils.NetworkState
+import javax.inject.Inject
 
 abstract class FollowActivity : AppCompatActivity() {
     protected var recyclerView : RecyclerView ?= null
-    protected var userhomepageService = UserhomepageService()
+
+    @Inject
+    lateinit var userhomepageService : UserhomepageService
+
     protected lateinit var screenName : String
     protected var recyclerViewAdapter = UserFollowerAdapter()
     protected var dialog : AlertDialog ?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         val builder = android.app.AlertDialog.Builder(this)
+        (application as TwitterApplication).component!!.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_followers)
         builder.setCancelable(false)
