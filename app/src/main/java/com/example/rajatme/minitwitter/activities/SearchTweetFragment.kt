@@ -16,8 +16,8 @@ import com.example.network.TwitterapiService
 import com.example.network.models.Tweet
 import com.example.rajatme.minitwitter.R
 import com.example.rajatme.minitwitter.TwitterApplication
-import com.example.rajatme.minitwitter.ViewModel.SearchTweetViewModel
-import com.example.rajatme.minitwitter.ViewModel.SearchTweetViewModelFactory
+import com.example.rajatme.minitwitter.viewModel.SearchTweetViewModel
+import com.example.rajatme.minitwitter.viewModel.SearchTweetViewModelFactory
 import com.example.rajatme.minitwitter.adapters.UserTweetAdapter
 import com.example.rajatme.minitwitter.databinding.SearchTweetBinding
 import javax.inject.Inject

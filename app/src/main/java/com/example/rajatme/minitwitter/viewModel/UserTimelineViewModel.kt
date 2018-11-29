@@ -1,4 +1,4 @@
-package com.example.rajatme.minitwitter.ViewModel
+package com.example.rajatme.minitwitter.viewModel
 
 
 import android.arch.lifecycle.LiveData

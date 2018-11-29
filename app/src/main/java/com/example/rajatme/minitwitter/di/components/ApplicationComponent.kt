@@ -10,7 +10,6 @@ import com.example.rajatme.minitwitter.di.modules.DatabaseModule
 
 import com.example.rajatme.minitwitter.di.modules.RetrofitModule
 import dagger.Component
-import java.sql.Time
 import javax.inject.Singleton
 
 @Singleton

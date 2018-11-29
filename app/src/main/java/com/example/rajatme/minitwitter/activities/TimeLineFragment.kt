@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -17,12 +16,10 @@ import com.example.database.UserTimelineEntity
 import com.example.rajatme.minitwitter.R
 import com.example.rajatme.minitwitter.TwitterApplication
 //import com.example.network.service.UserTimeLineService
-import com.example.rajatme.minitwitter.ViewModel.UserTimelineViewModel
-import com.example.rajatme.minitwitter.ViewModel.UserTimelineViewModelFactory
+import com.example.rajatme.minitwitter.viewModel.UserTimelineViewModel
+import com.example.rajatme.minitwitter.viewModel.UserTimelineViewModelFactory
 import com.example.rajatme.minitwitter.adapters.UserTimelineAdapter
-import com.example.rajatme.minitwitter.adapters.UserTweetAdapter
 import com.example.rajatme.minitwitter.databinding.ActivityTimelineBinding
-import com.example.rajatme.minitwitter.databinding.SearchTweetBinding
 import com.example.services.UserTimeLineService
 import com.example.services.Utils.OAuthTokenObject
 import com.example.services.Utils.PREFERENCE_NAME

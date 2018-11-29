@@ -2,17 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="twitterUser" type="com.example.rajatme.minitwitter.databindingmodel.TwitterUser"/>
+        <variable name="viewModel" type="com.example.rajatme.minitwitter.viewModel.UserhomePageViewModel"/>
     </data>
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/constraintLayout">
 
         <Button
                 android:text="Follow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/follow" android:layout_marginTop="8dp"
+                android:enabled="@{viewModel.buttonStatus}"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="24dp" android:layout_marginRight="24dp"/>
         <TextView
@@ -20,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/black"
-                android:text = "@{twitterUser.userName}"
+                android:text = "@{viewModel.userName}"
                 android:id="@+id/userName"
                 android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/profilePic"
                 app:layout_constraintStart_toStartOf="@+id/profilePic"
@@ -29,14 +31,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/userHandle" android:layout_marginTop="8dp"
-                android:text = "@{twitterUser.userHandle}"
+                android:text = "@{viewModel.userHandle}"
                 android:textColor="@color/grey"
                 app:layout_constraintTop_toBottomOf="@+id/userName" app:layout_constraintStart_toStartOf="@+id/userName"/>
         <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/userDescription"
-                android:text = "@{twitterUser.userDescription}"
+                android:text = "@{viewModel.userDescription}"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/userHandle"
                 android:layout_marginTop="10dp" app:layout_constraintTop_toBottomOf="@+id/userHandle"
@@ -54,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/follower"
-                android:text = "@{twitterUser.followerCount}"
+                android:text="@{viewModel.followers}"
                 app:layout_constraintStart_toStartOf="@+id/userDescription"
                 android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/userDescription"
                 android:focusable="true"/>
@@ -62,8 +64,8 @@
                 android:clickable="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text = "@{twitterUser.friendsCount}"
                 android:id="@+id/following" app:layout_constraintEnd_toStartOf="@+id/follow" android:layout_marginEnd="32dp"
+                android:text="@{viewModel.following}"
                 android:layout_marginRight="32dp" app:layout_constraintStart_toEndOf="@+id/follower"
                 android:layout_marginLeft="8dp" android:layout_marginStart="8dp"
                 app:layout_constraintTop_toTopOf="@+id/follower" android:focusable="true"/>

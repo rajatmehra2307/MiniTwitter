@@ -1,8 +1,7 @@
-package com.example.rajatme.minitwitter.ViewModel
+package com.example.rajatme.minitwitter.viewModel
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.content.Context
 import com.example.services.UserTimeLineService
 
 class UserTimelineViewModelFactory(private val userTimeLineService: UserTimeLineService) : ViewModelProvider.NewInstanceFactory() {

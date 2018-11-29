@@ -43,9 +43,4 @@ class BaseActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container,selectedFragment).commit()
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,selectedFragment).commit()
-    }
-
 }

@@ -5,8 +5,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
 import android.os.Bundle
 import com.example.network.models.UserInfo
-import com.example.rajatme.minitwitter.ViewModel.UserTweetViewModel
-import com.example.rajatme.minitwitter.ViewModel.UserTweetViewModelFactory
+import com.example.rajatme.minitwitter.viewModel.UserTweetViewModel
+import com.example.rajatme.minitwitter.viewModel.UserTweetViewModelFactory
 import com.example.services.Utils.NetworkState
 
 class FollowingActivity : FollowActivity() {

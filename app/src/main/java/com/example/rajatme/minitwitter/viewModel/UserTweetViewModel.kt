@@ -1,4 +1,4 @@
-package com.example.rajatme.minitwitter.ViewModel
+package com.example.rajatme.minitwitter.viewModel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
@@ -7,7 +7,6 @@ import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
 import com.example.services.UserhomepageService
 import com.example.services.Utils.NetworkState
-import javax.inject.Inject
 
 class UserTweetViewModel(var screenName : String, var repository: UserhomepageService) : ViewModel() {
 
