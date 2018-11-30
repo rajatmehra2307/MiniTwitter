@@ -22,15 +22,10 @@ import com.tylersuehr.socialtextview.SocialTextView
 
 class UserTimelineViewHolder(var binding : TweetTimelineBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    private var tweetText: SocialTextView? = null
-    private var retweetButton: Button? = null
-    private var replyButton: Button? = null
     private val TAG = "UserTimeLineAdapter"
 
     fun initialise() {
-        tweetText = binding.updateText
-        retweetButton = binding.retweet
-        replyButton = binding.reply
+        val tweetText = binding.updateText
         var listener = SocialTextView.OnLinkClickListener { i: Int, s: String ->
             when (i) {
                 HASHTAG -> {
@@ -59,10 +54,7 @@ class UserTimelineViewHolder(var binding : TweetTimelineBinding) : RecyclerView.
         val createdAt = userTimelineEntity.timeCreated
         var tweetDataBinding = TweetDataBinding(userTimelineEntity.imageUrl,userTimelineEntity.userName!!,(DateUtils.getRelativeTimeSpanString(createdAt!!)).toString())
         binding.tweet = tweetDataBinding
-        Glide.with(itemView.context)
-            .load(userTimelineEntity.imageUrl)
-            .placeholder(R.drawable.ic_action_name)
-            .into(binding.profileImg)
+
     }
 
 
