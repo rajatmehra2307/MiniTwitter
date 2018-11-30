@@ -71,17 +71,17 @@ class UserhomepageActivity : AppCompatActivity() {
                  }
             }
         }
-        val observerProfilePicUrl = Observer<String> {
-            if(it != null) {
-                Glide.with(applicationContext)
-                    .load(it)
-                    .placeholder(R.drawable.ic_action_name)
-                    .into(profilepic)
-            }
-        }
+//        val observerProfilePicUrl = Observer<String> {
+//            if(it != null) {
+//                Glide.with(applicationContext)
+//                    .load(it)
+//                    .placeholder(R.drawable.ic_action_name)
+//                    .into(profilepic)
+//            }
+//        }
 
         userhomepageViewModel.state.observe(this,observerNetworkState)
-        userhomepageViewModel.profilePicUrl.observe(this,observerProfilePicUrl)
+//        userhomepageViewModel.profilePicUrl.observe(this,observerProfilePicUrl)
 
         binding!!.follow.setOnClickListener{
             userhomepageViewModel.followAUser(screenName)

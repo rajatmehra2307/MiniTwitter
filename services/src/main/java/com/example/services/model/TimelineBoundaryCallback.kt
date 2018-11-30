@@ -32,7 +32,6 @@ class TimelineBoundaryCallback(private val cache : TimelineCache, var apiservice
 
 
     fun requestAndSave(maxId : String?, sinceId : String ?) {
-        var baseUrl = BASE_URL
         var parameterValues = mutableMapOf<String,String> ()
         parameterValues.put("include_my_retweet","true")
         parameterValues.put("count",NETWORK_CALL_SIZE)

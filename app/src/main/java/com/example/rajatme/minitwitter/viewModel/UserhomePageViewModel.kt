@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PagedList
 import android.databinding.ObservableField
+import android.util.Log
 import com.example.network.models.Tweet
 import com.example.network.models.UserInfo
 import com.example.rajatme.minitwitter.Utils.formatNumber
@@ -21,7 +22,7 @@ class UserhomePageViewModel @Inject constructor(var userhomepageService: Userhom
     var userName =  ObservableField<String>()
     var userHandle =  ObservableField<String>()
     var userDescription = ObservableField<String>()
-    var profilePicUrl = MutableLiveData<String>()
+    var profilePicUrl = ObservableField<String>()
     var followers = ObservableField<String>()
     var following = ObservableField<String>()
     var state = MutableLiveData<NetworkState.Status>().apply { value = NetworkState.Status.RUNNING }
@@ -42,6 +43,7 @@ class UserhomePageViewModel @Inject constructor(var userhomepageService: Userhom
                     lookUpConnection(result)
 
             },{ error ->
+                    Log.e("UserhomepageViewModel->",error.message)
                     state.value = NetworkState.Status.FAILED
             })
     }
@@ -55,23 +57,26 @@ class UserhomePageViewModel @Inject constructor(var userhomepageService: Userhom
         userhomepageService.lookUpConnection(userInfo.handle)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                setUpViewModel(userInfo)
-                if(it!= null && !it.isEmpty()) {
-                    var temp = it.get(0)
+            .subscribe ({
+                result -> setUpViewModel(userInfo)
+                if(result!= null && !result.isEmpty()) {
+                    var temp = result.get(0)
                     for (connection in temp.connection)
                         if (connection.contains("none"))
                             buttonStatus.set(true)
                 }
-            }
+            }, { error ->
+                Log.e("UserhomepageViewModel",error.message)
+                        state.value = NetworkState.Status.FAILED
+            })
     }
 
     fun setUpViewModel(userInfo: UserInfo) {
         userName.set(userInfo.name)
         userHandle.set(userInfo.handle)
-        profilePicUrl.value = userInfo.imageUrl
+        profilePicUrl.set(userInfo.imageUrl)
         followers.set(formatNumber(userInfo.followers) + " followers")
-        following.set(formatNumber(userInfo.friends) + " followers")
+        following.set(formatNumber(userInfo.friends) + " following")
         userDescription.set(userInfo.description)
         state.value = NetworkState.Status.SUCCESS
 

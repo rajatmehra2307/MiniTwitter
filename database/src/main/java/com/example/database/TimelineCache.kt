@@ -3,7 +3,6 @@ package com.example.database
 import android.arch.paging.DataSource
 import android.util.Log
 import java.util.concurrent.Executor
-import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class TimelineCache @Inject constructor(private val userTimelineDao: UserTimelineDao,
