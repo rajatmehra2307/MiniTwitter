@@ -1,6 +1,8 @@
 package com.example.rajatme.minitwitter.adapters
 
 import android.content.Intent
+import android.net.Uri
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import android.view.View
@@ -16,6 +18,7 @@ import com.example.rajatme.minitwitter.databinding.TweetTimelineBinding
 import com.example.rajatme.minitwitter.databindingmodel.TweetDataBinding
 import com.example.services.Utils.HASHTAG
 import com.example.services.Utils.MENTION
+import com.example.services.Utils.URL
 import com.tylersuehr.socialtextview.SocialTextView
 import java.text.SimpleDateFormat
 
@@ -43,8 +46,8 @@ class UserTweetViewHolder(var binding : TweetTimelineBinding) : RecyclerView.Vie
                     intent.putExtra("name", s)
                     itemView.context.startActivity(intent)
                 }
-                else -> {
-
+                URL -> {
+                    itemView.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(s)))
                 }
             }
 

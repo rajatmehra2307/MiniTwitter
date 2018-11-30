@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:bind="http://schemas.android.com/tools">
     <data>
         <variable name="viewModel" type="com.example.rajatme.minitwitter.viewModel.UserhomePageViewModel"/>
     </data>
@@ -48,6 +48,7 @@
                 android:layout_width="35dp"
                 android:layout_height="30dp"
                 android:id="@+id/profilePic"
+                app:imageUrl="@{viewModel.profilePicUrl}"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginLeft="16dp" android:layout_marginStart="16dp" android:layout_marginTop="32dp"
                 app:layout_constraintTop_toTopOf="parent"/>
